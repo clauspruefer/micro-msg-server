@@ -64,23 +64,19 @@ def application(environ, start_response):
                             break
                         time.sleep(1)
 
-            #except Exception as e:
-            #    result['error'] = True
-            #    result['exception_id'] = type(e).__name__
-            #    result['exception'] = 'Server send error {0}'.format(e)
-            #    raise e
+            except Exception as e:
+                result['error'] = True
+                result['exception_id'] = type(e).__name__
+                result['exception'] = 'Server send error {0}'.format(e)
+                raise e
 
             with open('/log/msgserver-rcv.json', 'a') as fh:
                 fh.write(str(received))
 
             yield bytes(json.dumps(json.loads(received)), 'utf-8')
 
-        #except Exception as e:
-        #    result['error'] = True
-        #    result['exception_id'] = type(e).__name__
-        #    result['exception'] = '{0}'.format(e)
-
-        #    with open('/log/exception.log', 'a') as fh:
-        #        fh.write(str(e))
-
-        #    yield bytes(json.dumps(result), 'utf-8')
+        except Exception as e:
+            result['error'] = True
+            result['exception_id'] = type(e).__name__
+            result['exception'] = '{0}'.format(e)
+            yield bytes(json.dumps(result), 'utf-8')
